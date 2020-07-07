@@ -1,6 +1,5 @@
 .flag-authors {
   margin-top: 1rem;
-  margin-bottom: 1rem;
   background-color: #df2c2c;
 }
 
@@ -10,7 +9,12 @@
   background-color: #ce2424;
 }
 
-.reasons-form {
+.reasons-list {
   list-style: decimal !important;
   margin-left: 15px !important;
+  margin-top: 1rem;
+}
+
+.reasons-form textarea {
+  margin: 1rem 0 .8rem 0
 }

@@ -118,6 +118,7 @@ function App() {
       </button>
       {isVisible && (
         <form
+          className="reasons-form"
           onSubmit={(e) => {
             e.preventDefault();
             const variables = {
@@ -143,11 +144,11 @@ function App() {
           <button type="submit">Send Reason</button>
         </form>
       )}
-      <ul className="reasons-form">
+      <ul className="reasons-list">
         {Object.values(data).length > 0 && data.reasons?.length === 0 ? (
           <p>No reports</p>
         ) : (
-          data.reasons.map(({ reason, id }) => (
+          data.reasons.map(({ reason, id, reviewerId }) => (
             <li key={uuidv4()}>
               <Linkify>{reason}</Linkify>
               <small
@@ -155,7 +156,7 @@ function App() {
                   textDecoration: "underline",
                   cursor: "pointer",
                   color: "blue",
-                  marginLeft: ".5rem",
+                  marginLeft: ".2rem",
                 }}
                 onClick={(e) => {
                   e.preventDefault();
@@ -167,13 +168,20 @@ function App() {
                   textDecoration: "underline",
                   cursor: "pointer",
                   color: "red",
-                  marginLeft: ".5rem",
+                  marginLeft: ".2rem",
                 }}
                 onClick={(e) => {
                   e.preventDefault();
                   deleteItem({ id: +id });
                 }}>
                 [×]
+              </small>
+              <small
+                style={{
+                  marginLeft: ".5rem",
+                }}
+                >
+                [@{reviewerId}]
               </small>
             </li>
           ))
