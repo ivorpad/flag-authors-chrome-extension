@@ -1,25 +1,17 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
-  "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "manifest_version": 2,
+  "name": "ThemeForest Flag Authors",
+  "version": "0.0.1",
+  "description": "A small extension to flag authors in ThemeForest",
+  "background": {
+	"scripts": ["background.js"],
+	"persistent": true
+  },
+  "content_scripts": [
+	{
+	  "matches": ["https://*.themeforest.net/admin/awesome_proofing*"],
+    "js": ["static/js/main.js", "static/js/runtime-main.js", "static/js/2.js"],
+    "css": ["static/css/main.chunk.css"]
+	}
+  ]
 }
