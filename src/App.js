@@ -1,65 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useQuery, useMutation, queryCache } from "react-query";
 import "./App.css";
 import { request } from "graphql-request";
 import { v4 as uuidv4 } from "uuid";
 import Linkify from "react-linkify";
+import { FETCH_REASONS } from './graphql/queries.ts'
+import { DELETE_ITEM, CREATE_NEW_REASON } from "./graphql/mutations.ts";
 
-const FETCH_REASONS = `query($author: String!) {
-  reasons(orderBy: {createdAt: desc}, where: { authorId: { equals: $author } }) {
-    id
-    reviewerId
-    reason
-    authorId
-  }
-}`;
+const authorIdNode = document
+  .querySelector(".submission-details > div")
+  .querySelectorAll("a")[0].innerText;
 
-const CREATE_NEW_REASON = `mutation($reason:String! $authorId: String! $reviewerId: String!) {
-  createOneReason(reason: $reason, authorId: $authorId, reviewerId: $reviewerId) {
-    reason
-    authorId
-    reviewerId
-    id
-  }
-}`;
-
-const DELETE_ITEM = `mutation($id: Int!) {
-  deleteOneReason(where: { id: $id }) {
-    reason
-    id
-  }
-}`; 
+const reviewerIdNode = document
+  .getElementById("spec-user-username")
+  .innerText.toLowerCase();
 
 function App() {
-
-  const [pageData, setPageData] = useState({})
   const [reason, setReason] = useState("")
   const [isVisible, setIsVisible] = useState(false)
 
-  useEffect(() => {
-
-    const authorId = document
-      .querySelector(".submission-details > div")
-      .querySelectorAll("a")[0].innerText;
-
-    const reviewerId = document
-      .getElementById("spec-user-username")
-      .innerText.toLowerCase();
-  
-      setPageData({
-        authorId,
-        reviewerId,
-      });
-
-  }, []);
-
   async function getData() {
-    const author = document
-      .querySelector(".submission-details > div")
-      .querySelectorAll("a")[0].innerText;
-
     return request(`${process.env.REACT_APP_GRAPHQL_HOST}`, FETCH_REASONS, {
-      author,
+      author: authorIdNode,
     })
       .then((data) => data)
       .catch((err) => err);
@@ -82,6 +44,7 @@ function App() {
   }
 
   const { data, isLoading } = useQuery("reasons", getData);
+  
   const [mutate] = useMutation(mutateData, {
     onMutate: (newReason) => {
       const previousReasons = queryCache.cancelQueries("reasons");
@@ -120,7 +83,7 @@ function App() {
           e.preventDefault();
           setIsVisible(() => !isVisible);
         }}>
-        {isVisible ? "× Close" : "Flag Author"}
+        {isVisible ? "Close" : "Flag Author"}
       </button>
       {isVisible && (
         <form
@@ -129,8 +92,8 @@ function App() {
             e.preventDefault();
             const variables = {
               reason,
-              authorId: pageData.authorId,
-              reviewerId: pageData.reviewerId,
+              authorId: authorIdNode,
+              reviewerId: reviewerIdNode,
             };
             mutate(variables, {
               onError: (e) => console.log("error", e),
