@@ -5,7 +5,7 @@ import { request } from "graphql-request";
 import { v4 as uuidv4 } from "uuid";
 import Linkify from "react-linkify";
 
-const query = `query($author: String!) {
+const FETCH_REASONS = `query($author: String!) {
   reasons(orderBy: {createdAt: desc}, where: { authorId: { equals: $author } }) {
     id
     reviewerId
@@ -14,7 +14,7 @@ const query = `query($author: String!) {
   }
 }`;
 
-const mutation = `mutation($reason:String! $authorId: String! $reviewerId: String!) {
+const CREATE_NEW_REASON = `mutation($reason:String! $authorId: String! $reviewerId: String!) {
   createOneReason(reason: $reason, authorId: $authorId, reviewerId: $reviewerId) {
     reason
     authorId
@@ -58,13 +58,19 @@ function App() {
       .querySelector(".submission-details > div")
       .querySelectorAll("a")[0].innerText;
 
-    return request(`${process.env.REACT_APP_GRAPHQL_HOST}`, query, { author })
+    return request(`${process.env.REACT_APP_GRAPHQL_HOST}`, FETCH_REASONS, {
+      author,
+    })
       .then((data) => data)
       .catch((err) => err);
   }
 
   async function mutateData(variables) {
-    return request(`${process.env.REACT_APP_GRAPHQL_HOST}`, mutation, variables)
+    return request(
+      `${process.env.REACT_APP_GRAPHQL_HOST}`,
+      CREATE_NEW_REASON,
+      variables
+    )
       .then((data) => data)
       .catch((err) => err);
   }
