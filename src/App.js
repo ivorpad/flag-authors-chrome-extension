@@ -58,19 +58,19 @@ function App() {
       .querySelector(".submission-details > div")
       .querySelectorAll("a")[0].innerText;
 
-    return request(`https://geo.ivorpad.com/graphql`, query, { author })
+    return request(`${process.env.REACT_APP_GRAPHQL_HOST}`, query, { author })
       .then((data) => data)
       .catch((err) => err);
   }
 
   async function mutateData(variables) {
-    return request(`https://geo.ivorpad.com/graphql`, mutation, variables)
+    return request(`${process.env.REACT_APP_GRAPHQL_HOST}`, mutation, variables)
       .then((data) => data)
       .catch((err) => err);
   }
 
   async function deleteItemMutation(variables) {
-    return request(`https://geo.ivorpad.com/graphql`, DELETE_ITEM, variables)
+    return request(`${process.env.REACT_APP_GRAPHQL_HOST}`, DELETE_ITEM, variables)
       .then((data) => data)
       .catch((err) => err);
   }
