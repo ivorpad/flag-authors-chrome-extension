@@ -21,12 +21,11 @@ function ReasonList() {
   });
 
   if (isLoading) return <p>Loading...</p>;
+  if (data?.reasons?.length === 0) return <p>No reports</p>;
 
   return (
     <ul className="reasons-list">
-      {Object.values(data).length > 0 && data.reasons?.length === 0 ? (
-        <p>No reports</p>
-      ) : (
+      {Object.values(data).length > 0 &&
         data.reasons.map(({ reason, id, reviewerId }) => (
           <li key={uuidv4()}>
             <Linkify>{reason}</Linkify>
@@ -62,8 +61,7 @@ function ReasonList() {
               [@{reviewerId}]
             </small>
           </li>
-        ))
-      )}
+        ))}
     </ul>
   );
 }
