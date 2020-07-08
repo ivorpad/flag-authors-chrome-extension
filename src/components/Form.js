@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, createRef, useEffect } from "react";
 import { useMutation, queryCache } from "react-query";
 import { createItemMutation } from "../graphql/mutations";
 import Button from "./Button";
 import { authorIdNode, reviewerIdNode } from "../utils/nodes";
 
+const formRef = createRef(null);
+
 function Form() {
   const [isVisible, setIsVisible] = useState(false);
   const [reason, setReason] = useState("");
+ 
 
   const [createItem] = useMutation(createItemMutation, {
     onMutate: (newReason) => {
@@ -23,6 +26,12 @@ function Form() {
       queryCache.invalidateQueries("reasons");
     },
   });
+
+  useEffect(() => {
+    if(isVisible) {
+      formRef.current.focus();
+    }
+  },[isVisible])
 
   return (
     <>
@@ -44,6 +53,7 @@ function Form() {
             setReason("");
           }}>
           <textarea
+            ref={formRef}
             onChange={(e) => {
               setReason(e.target.value);
             }}
