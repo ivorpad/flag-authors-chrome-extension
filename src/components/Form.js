@@ -10,7 +10,7 @@ function Form() {
   const [isVisible, setIsVisible] = useState(false);
   const [reason, setReason] = useState("");
 
-  const [createItem] = useMutation(createItemMutation, {
+  const [createItem, { isLoading }] = useMutation(createItemMutation, {
     onMutate: (newReason) => {
       const previousReasons = queryCache.cancelQueries("reasons");
       queryCache.setQueryData("reasons", (old) => {
@@ -47,7 +47,9 @@ function Form() {
             };
             createItem(variables, {
               onError: (e) => console.log("error", e),
-              onSuccess: (e) => setIsVisible(false),
+              onSuccess: () => {
+                setIsVisible(false);
+              },
             });
             setReason("");
           }}>
@@ -56,6 +58,7 @@ function Form() {
             onChange={(e) => {
               setReason(e.target.value);
             }}
+            disabled={isLoading}
             name="reason"
             id="reason"
             cols="30"
