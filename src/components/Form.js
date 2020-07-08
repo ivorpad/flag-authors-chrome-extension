@@ -9,7 +9,6 @@ const formRef = createRef(null);
 function Form() {
   const [isVisible, setIsVisible] = useState(false);
   const [reason, setReason] = useState("");
- 
 
   const [createItem] = useMutation(createItemMutation, {
     onMutate: (newReason) => {
@@ -28,10 +27,10 @@ function Form() {
   });
 
   useEffect(() => {
-    if(isVisible) {
+    if (isVisible) {
       formRef.current.focus();
     }
-  },[isVisible])
+  }, [isVisible]);
 
   return (
     <>
